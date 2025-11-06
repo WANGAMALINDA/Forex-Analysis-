@@ -959,6 +959,100 @@ const EnhancedForexDashboard = () => {
             {/* Comprehensive AI Analysis */}
             {aiAnalysis && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Quick SL/TP Summary - NEW SECTION */}
+                {aiAnalysis.recommendations?.find(r => r.type === 'buy' || r.type === 'sell') && (
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(59, 130, 246, 0.15))',
+                    backdropFilter: 'blur(4px)',
+                    borderRadius: '12px',
+                    border: '2px solid rgba(34, 211, 238, 0.4)',
+                    padding: '24px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                      <Target style={{ color: '#22d3ee', width: '24px', height: '24px' }} />
+                      <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: '#ffffff' }}>Trading Levels</h3>
+                    </div>
+                    
+                    {(() => {
+                      const tradeRec = aiAnalysis.recommendations.find(r => r.type === 'buy' || r.type === 'sell');
+                      return (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px' }}>
+                          <div style={{
+                            background: 'rgba(59, 130, 246, 0.2)',
+                            borderRadius: '12px',
+                            padding: '20px',
+                            textAlign: 'center',
+                            border: '2px solid rgba(59, 130, 246, 0.4)'
+                          }}>
+                            <div style={{ color: '#94a3b8', fontSize: '12px', marginBottom: '8px', fontWeight: 'bold' }}>ENTRY PRICE</div>
+                            <div style={{ color: '#60a5fa', fontSize: '28px', fontWeight: 'bold' }}>
+                              {tradeRec.entry?.toFixed(selectedAsset.type === 'crypto' ? 2 : 5)}
+                            </div>
+                            <div style={{ 
+                              marginTop: '8px',
+                              padding: '4px 12px',
+                              borderRadius: '20px',
+                              background: tradeRec.type === 'buy' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                              color: tradeRec.type === 'buy' ? '#4ade80' : '#f87171',
+                              fontSize: '12px',
+                              fontWeight: 'bold'
+                            }}>
+                              {tradeRec.type.toUpperCase()} {tradeRec.strength.toUpperCase()}
+                            </div>
+                          </div>
+                          
+                          <div style={{
+                            background: 'rgba(239, 68, 68, 0.2)',
+                            borderRadius: '12px',
+                            padding: '20px',
+                            textAlign: 'center',
+                            border: '2px solid rgba(239, 68, 68, 0.4)'
+                          }}>
+                            <div style={{ color: '#94a3b8', fontSize: '12px', marginBottom: '8px', fontWeight: 'bold' }}>STOP LOSS</div>
+                            <div style={{ color: '#f87171', fontSize: '28px', fontWeight: 'bold' }}>
+                              {typeof tradeRec.stopLoss === 'number' ? tradeRec.stopLoss.toFixed(selectedAsset.type === 'crypto' ? 2 : 5) : tradeRec.stopLoss}
+                            </div>
+                            <div style={{ color: '#fca5a5', fontSize: '12px', marginTop: '8px' }}>
+                              Risk: {Math.abs(((tradeRec.stopLoss - tradeRec.entry) / tradeRec.entry * 100)).toFixed(2)}%
+                            </div>
+                          </div>
+                          
+                          <div style={{
+                            background: 'rgba(34, 197, 94, 0.2)',
+                            borderRadius: '12px',
+                            padding: '20px',
+                            textAlign: 'center',
+                            border: '2px solid rgba(34, 197, 94, 0.4)'
+                          }}>
+                            <div style={{ color: '#94a3b8', fontSize: '12px', marginBottom: '8px', fontWeight: 'bold' }}>TAKE PROFIT</div>
+                            <div style={{ color: '#4ade80', fontSize: '28px', fontWeight: 'bold' }}>
+                              {typeof tradeRec.takeProfit === 'number' ? tradeRec.takeProfit.toFixed(selectedAsset.type === 'crypto' ? 2 : 5) : tradeRec.takeProfit}
+                            </div>
+                            <div style={{ color: '#86efac', fontSize: '12px', marginTop: '8px' }}>
+                              Reward: {Math.abs(((tradeRec.takeProfit - tradeRec.entry) / tradeRec.entry * 100)).toFixed(2)}%
+                            </div>
+                          </div>
+                          
+                          <div style={{
+                            background: 'rgba(34, 211, 238, 0.2)',
+                            borderRadius: '12px',
+                            padding: '20px',
+                            textAlign: 'center',
+                            border: '2px solid rgba(34, 211, 238, 0.4)'
+                          }}>
+                            <div style={{ color: '#94a3b8', fontSize: '12px', marginBottom: '8px', fontWeight: 'bold' }}>RISK/REWARD</div>
+                            <div style={{ color: '#22d3ee', fontSize: '28px', fontWeight: 'bold' }}>
+                              1:{(Math.abs((tradeRec.takeProfit - tradeRec.entry)) / Math.abs((tradeRec.stopLoss - tradeRec.entry))).toFixed(2)}
+                            </div>
+                            <div style={{ color: '#67e8f9', fontSize: '12px', marginTop: '8px' }}>
+                              Position: 2-5%
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
                 {/* Main AI Analysis Card */}
                 <div style={{
                   background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(96, 165, 250, 0.1))',
@@ -1136,9 +1230,27 @@ const EnhancedForexDashboard = () => {
                           {rec.reason}
                         </div>
                         {rec.stopLoss && rec.takeProfit && (
-                          <div style={{ display: 'flex', gap: '16px', marginTop: '8px', fontSize: '12px', flexWrap: 'wrap' }}>
-                            <span style={{ color: '#f87171' }}>SL: {typeof rec.stopLoss === 'number' ? rec.stopLoss.toFixed(selectedAsset.type === 'crypto' ? 2 : 5) : rec.stopLoss}</span>
-                            <span style={{ color: '#4ade80' }}>TP: {typeof rec.takeProfit === 'number' ? rec.takeProfit.toFixed(selectedAsset.type === 'crypto' ? 2 : 5) : rec.takeProfit}</span>
+                          <div style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: '1fr 1fr', 
+                            gap: '12px', 
+                            marginTop: '12px',
+                            padding: '12px',
+                            background: 'rgba(15, 23, 42, 0.5)',
+                            borderRadius: '8px'
+                          }}>
+                            <div style={{ textAlign: 'center' }}>
+                              <div style={{ color: '#94a3b8', fontSize: '11px', marginBottom: '4px' }}>STOP LOSS</div>
+                              <div style={{ color: '#f87171', fontSize: '18px', fontWeight: 'bold' }}>
+                                {typeof rec.stopLoss === 'number' ? rec.stopLoss.toFixed(selectedAsset.type === 'crypto' ? 2 : 5) : rec.stopLoss}
+                              </div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                              <div style={{ color: '#94a3b8', fontSize: '11px', marginBottom: '4px' }}>TAKE PROFIT</div>
+                              <div style={{ color: '#4ade80', fontSize: '18px', fontWeight: 'bold' }}>
+                                {typeof rec.takeProfit === 'number' ? rec.takeProfit.toFixed(selectedAsset.type === 'crypto' ? 2 : 5) : rec.takeProfit}
+                              </div>
+                            </div>
                           </div>
                         )}
                       </div>
