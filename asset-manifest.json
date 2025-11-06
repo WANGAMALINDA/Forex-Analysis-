@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Forex-Analysis-/static/css/main.f855e6bc.css",
+    "main.js": "/Forex-Analysis-/static/js/main.a25f0256.js",
+    "static/js/453.7229bc09.chunk.js": "/Forex-Analysis-/static/js/453.7229bc09.chunk.js",
+    "index.html": "/Forex-Analysis-/index.html",
+    "main.f855e6bc.css.map": "/Forex-Analysis-/static/css/main.f855e6bc.css.map",
+    "main.a25f0256.js.map": "/Forex-Analysis-/static/js/main.a25f0256.js.map",
+    "453.7229bc09.chunk.js.map": "/Forex-Analysis-/static/js/453.7229bc09.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.a25f0256.js"
+  ]
+}
